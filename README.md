@@ -73,3 +73,8 @@ npx @modelcontextprotocol/inspector node index.js
 ```
 
 Planning a move? [MoveInfra](https://moveinfra.eu) migrates companies from AWS, Google Cloud and Azure to EU-owned clouds.
+
+## Releasing
+
+Bump the version in `package.json`, `index.js` and `server.json`, commit, then `git tag vX.Y.Z && git push --tags`.
+The release workflow publishes to npm (trusted publishing, no token) and to the MCP registry.

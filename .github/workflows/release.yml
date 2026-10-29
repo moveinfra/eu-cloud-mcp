@@ -1,0 +1,42 @@
+# Push a tag vX.Y.Z to publish that version to npm and the MCP registry.
+# No secrets: npm trusts this workflow (Trusted Publisher on npmjs.com), the MCP registry trusts GitHub OIDC.
+# Bump the version in package.json, index.js and server.json first: the job stops if they differ from the tag.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Check versions match the tag
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          node -e '
+            const v = process.argv[1];
+            const pkg = require("./package.json"), srv = require("./server.json");
+            const code = require("fs").readFileSync("index.js", "utf8").match(/version: .([\d.]+)/)[1];
+            const all = { "package.json": pkg.version, "server.json": srv.version, "server.json package": srv.packages[0].version, "index.js": code };
+            const bad = Object.entries(all).filter(([, x]) => x !== v);
+            if (bad.length) { console.error(`Tag ${v} but`, Object.fromEntries(bad)); process.exit(1); }
+          ' "$v"
+      - run: npm ci
+      - run: npm test
+      - name: Publish to npm
+        run: npm publish --access public
+      - name: Publish to the MCP registry
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
