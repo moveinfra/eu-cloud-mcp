@@ -1,0 +1,46 @@
+{
+  "name": "eu-cloud-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for moving off AWS, Google Cloud and Azure: EU-owned alternatives, EU cloud prices, exit fees and a Terraform lock-in scan. Data by MoveInfra.",
+  "type": "module",
+  "bin": {
+    "eu-cloud-mcp": "index.js"
+  },
+  "files": [
+    "index.js",
+    "lib/",
+    "README.md",
+    "LICENSE"
+  ],
+  "mcpName": "io.github.moveinfra/eu-cloud-mcp",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "cloud-migration",
+    "eu-cloud",
+    "aws",
+    "hetzner",
+    "upcloud",
+    "scaleway",
+    "ovhcloud",
+    "data-act",
+    "finops"
+  ],
+  "homepage": "https://moveinfra.eu/tools/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moveinfra/eu-cloud-mcp.git"
+  },
+  "license": "Apache-2.0",
+  "author": "MoveInfra <hello@moveinfra.eu> (https://moveinfra.eu)",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  }
+}

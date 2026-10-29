@@ -1,0 +1,17 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.moveinfra/eu-cloud-mcp",
+  "title": "EU Cloud",
+  "description": "Move off AWS, GCP, Azure: EU-owned alternatives, EU cloud prices, exit fees, Terraform lock-in scan.",
+  "repository": { "url": "https://github.com/moveinfra/eu-cloud-mcp", "source": "github" },
+  "websiteUrl": "https://moveinfra.eu/tools/",
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "eu-cloud-mcp",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" }
+    }
+  ]
+}
