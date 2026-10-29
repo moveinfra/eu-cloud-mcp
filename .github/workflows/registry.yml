@@ -1,0 +1,22 @@
+# Publishes server.json to the MCP registry (registry.modelcontextprotocol.io) by hand, e.g. for a version already on npm.
+# The io.github.moveinfra/* namespace needs proof of the org, which GitHub Actions OIDC gives; a personal login does not.
+# Tag releases do this as part of release.yml.
+name: MCP registry
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Publish server.json
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
