@@ -17,6 +17,17 @@ maintained by [MoveInfra](https://moveinfra.eu), not from the model's memory.
   the monthly updates without a new release.
 - **Open source**, Apache-2.0. Node.js 20 or later.
 
+## Use the hosted server (no install)
+
+```
+https://mcp.moveinfra.eu/mcp
+```
+
+Streamable HTTP, no login, no state kept. Claude Code: `claude mcp add --transport http eu-cloud https://mcp.moveinfra.eu/mcp`.
+The hosted server has the same four tools, with one difference: `scan_terraform_lock_in` takes the contents of your
+`.tf` files as text (up to 200,000 characters, scanned in memory, not stored) because it cannot see your disk.
+For a scan that never leaves your machine, install it locally:
+
 ## Install
 
 Claude Code:
@@ -70,11 +81,12 @@ line numbers, and a CI check, use [cloud-lock-in-scanner](https://github.com/mov
 npm ci
 npm test            # tests read the live data
 npx @modelcontextprotocol/inspector node index.js
+node http.js          # hosted variant on http://127.0.0.1:8090/mcp (also: docker build -t eu-cloud-mcp .)
 ```
 
 Planning a move? [MoveInfra](https://moveinfra.eu) migrates companies from AWS, Google Cloud and Azure to EU-owned clouds.
 
 ## Releasing
 
-Bump the version in `package.json`, `index.js` and `server.json`, commit, then `git tag vX.Y.Z && git push --tags`.
+Bump the version in `package.json`, `lib/server.js` and `server.json`, commit, then `git tag vX.Y.Z && git push --tags`.
 The release workflow publishes to npm (trusted publishing, no token) and to the MCP registry.

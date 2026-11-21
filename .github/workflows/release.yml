@@ -1,6 +1,6 @@
 # Push a tag vX.Y.Z to publish that version to npm and the MCP registry.
 # No secrets: npm trusts this workflow (Trusted Publisher on npmjs.com), the MCP registry trusts GitHub OIDC.
-# Bump the version in package.json, index.js and server.json first: the job stops if they differ from the tag.
+# Bump the version in package.json, lib/server.js and server.json first: the job stops if they differ from the tag.
 name: Release
 
 on:
@@ -26,8 +26,8 @@ jobs:
           node -e '
             const v = process.argv[1];
             const pkg = require("./package.json"), srv = require("./server.json");
-            const code = require("fs").readFileSync("index.js", "utf8").match(/version: .([\d.]+)/)[1];
-            const all = { "package.json": pkg.version, "server.json": srv.version, "server.json package": srv.packages[0].version, "index.js": code };
+            const code = require("fs").readFileSync("lib/server.js", "utf8").match(/VERSION = .([\d.]+)/)[1];
+            const all = { "package.json": pkg.version, "server.json": srv.version, "server.json package": srv.packages[0].version, "lib/server.js": code };
             const bad = Object.entries(all).filter(([, x]) => x !== v);
             if (bad.length) { console.error(`Tag ${v} but`, Object.fromEntries(bad)); process.exit(1); }
           ' "$v"

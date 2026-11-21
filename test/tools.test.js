@@ -47,3 +47,38 @@ test('scan_terraform_lock_in scores a small project', async () => {
   assert.match(out, /EU portability score: 50\/100/);
   assert.match(out, /DynamoDB/);
 });
+
+test('hosted server: text scan only, no path tool, over HTTP', async () => {
+  const { scanTerraformText } = await import('../lib/tools.js');
+  const out = scanTerraformText(await load('rules'), 'resource "aws_dynamodb_table" "t" {\n}\nresource "aws_s3_bucket" "b" {\n}\n');
+  assert.match(out, /EU portability score/);
+  assert.match(out, /DynamoDB/);
+  assert.doesNotMatch(out, /Paths are relative/);
+
+  const { spawn } = await import('node:child_process');
+  const port = 18090 + Math.floor(Math.random() * 500);
+  const child = spawn(process.execPath, ['http.js'], { env: { ...process.env, PORT: String(port) }, stdio: ['ignore', 'pipe', 'inherit'] });
+  try {
+    await new Promise((r) => child.stdout.once('data', r));
+    const call = async (method, params) => {
+      const res = await fetch(`http://127.0.0.1:${port}/mcp`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', accept: 'application/json, text/event-stream' },
+        body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }),
+      });
+      return res.json();
+    };
+    const init = await call('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 't', version: '0' } });
+    assert.equal(init.result.serverInfo.name, 'eu-cloud-mcp');
+    const tools = (await call('tools/list', {})).result.tools;
+    const scan = tools.find((t) => t.name === 'scan_terraform_lock_in');
+    assert.deepEqual(Object.keys(scan.inputSchema.properties), ['terraform']);
+    const bad = await call('tools/call', { name: 'scan_terraform_lock_in', arguments: { path: '/etc' } });
+    assert.ok(bad.error || bad.result.isError);
+    const good = await call('tools/call', { name: 'estimate_cloud_exit_fees', arguments: { provider: 'aws', data_gb: 1000 } });
+    assert.match(good.result.content[0].text, /€|EUR|\$/);
+    assert.equal((await fetch(`http://127.0.0.1:${port}/mcp`)).status, 405);
+  } finally {
+    child.kill();
+  }
+});
