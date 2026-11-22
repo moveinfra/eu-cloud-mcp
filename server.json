@@ -8,12 +8,21 @@
     "source": "github"
   },
   "websiteUrl": "https://moveinfra.eu/tools/",
-  "version": "0.2.0",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/moveinfra/eu-cloud-mcp/main/icon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "240x240"
+      ]
+    }
+  ],
+  "version": "0.2.1",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "eu-cloud-mcp",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "transport": {
         "type": "stdio"
       }

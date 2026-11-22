@@ -1,6 +1,6 @@
 {
   "name": "eu-cloud-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "MCP server for moving off AWS, Google Cloud and Azure: EU-owned alternatives, EU cloud prices, exit fees and a Terraform lock-in scan. Data by MoveInfra.",
   "type": "module",
   "bin": {

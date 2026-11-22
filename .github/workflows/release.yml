@@ -37,6 +37,12 @@ jobs:
         run: npm publish --access public
       - name: Publish to the MCP registry
         run: |
+          # The registry checks the npm package; a new version can take a few minutes to appear there.
+          v="${GITHUB_REF_NAME#v}"
+          for i in $(seq 1 30); do
+            [ "$(npm view "eu-cloud-mcp@$v" version 2>/dev/null)" = "$v" ] && break
+            sleep 20
+          done
           curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
           ./mcp-publisher login github-oidc
           ./mcp-publisher publish

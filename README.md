@@ -12,7 +12,7 @@ maintained by [MoveInfra](https://moveinfra.eu), not from the model's memory.
 | `estimate_cloud_exit_fees` | Egress cost of moving N GB out of AWS, Azure or Google Cloud, whether their exit programs waive it, and what the EU Data Act allows (switching fees banned from 12 January 2027) |
 | `scan_terraform_lock_in` | Reads local `.tf` files: services used, how portable each one is, its EU replacement, and an EU portability score (0–100) |
 
-- **Read-only.** No cloud credentials. The Terraform scan reads files locally and sends nothing anywhere.
+- **Read-only.** No cloud credentials. Installed locally, the Terraform scan reads files on your machine and sends nothing anywhere. The hosted endpoint cannot read your files: there you paste the Terraform text, and it is scanned in memory and not stored.
 - **Current data.** Tools read the open data repositories below (cached for an hour), so prices and rules follow
   the monthly updates without a new release.
 - **Open source**, Apache-2.0. Node.js 20 or later.
