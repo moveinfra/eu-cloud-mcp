@@ -1,5 +1,7 @@
 # eu-cloud-mcp
 
+[![moveinfra/eu-cloud-mcp MCP server](https://glama.ai/mcp/servers/moveinfra/eu-cloud-mcp/badges/score.svg)](https://glama.ai/mcp/servers/moveinfra/eu-cloud-mcp)
+
 **An MCP server for moving off AWS, Google Cloud and Azure to EU-owned clouds.**
 Ask your AI assistant or coding agent which EU product replaces a service, what the same setup costs on each cloud,
 what leaving will cost in egress, and how locked-in your Terraform is. Answers come from open, sourced data
